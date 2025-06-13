@@ -1,0 +1,11 @@
+{
+    "allowed_domains": [
+        "example.com",
+        "myapp.com",
+        "lovable.dev",
+        "preview--tube-audio-forge.lovable.app",
+		"tempplay.online",
+        "localhost",
+        "127.0.0.1"
+    ]
+} 

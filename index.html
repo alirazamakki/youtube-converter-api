@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Converter API - Developer Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fab fa-youtube me-2"></i>YouTube Converter API
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="docs.html">Documentation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#playground">API Playground</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#examples">Examples</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5 pt-5">
+        <section id="home" class="mb-5">
+            <div class="jumbotron">
+                <h1><i class="fab fa-youtube me-3"></i>Welcome to YouTube Converter API</h1>
+                <p class="lead">Convert YouTube videos to MP3 or MP4 with ease. Fast, reliable, and developer-friendly.</p>
+                <hr class="my-4">
+                <p>Get started with our API in minutes. No complex setup required.</p>
+                <div class="d-flex gap-3">
+                    <a class="btn btn-primary btn-lg" href="#playground" role="button">
+                        <i class="fas fa-play me-2"></i>Try API Playground
+                    </a>
+                    <a class="btn btn-outline-light btn-lg" href="docs.html" role="button">
+                        <i class="fas fa-book me-2"></i>View Documentation
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="playground" class="mb-5">
+            <h2><i class="fas fa-code me-2"></i>API Playground</h2>
+            
+            <!-- API Base URL Display -->
+            <div class="alert alert-info">
+                <i class="fas fa-server me-2"></i>API Base URL: <span id="baseUrl">http://localhost:8000</span>
+            </div>
+
+            <!-- Video Conversion -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-video me-2"></i>Convert Video
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Video URL</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fab fa-youtube"></i></span>
+                            <input type="url" class="form-control" id="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Format</label>
+                            <select class="form-select" id="format">
+                                <option value="mp3">MP3</option>
+                                <option value="mp4">MP4</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Quality</label>
+                            <select class="form-select" id="quality">
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="convertBtn">
+                        <i class="fas fa-play me-2"></i>Start Conversion
+                    </button>
+                    
+                    <!-- Conversion Progress -->
+                    <div class="mt-3">
+                        <div class="progress">
+                            <div id="conversionProgress" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Conversion Status -->
+                    <div id="conversionStatus" class="mt-3"></div>
+                    <div id="tokenDisplay" class="mt-3"></div>
+                    
+                    <!-- Download Button -->
+                    <button class="btn btn-success mt-3" id="downloadBtn" style="display: none;">
+                        <i class="fas fa-download me-2"></i>Download File
+                    </button>
+                </div>
+            </div>
+
+            <!-- Check Status -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-info-circle me-2"></i>Check Conversion Status
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Token</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            <input type="text" class="form-control" id="statusToken" placeholder="Enter conversion token">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="checkStatusBtn">
+                        <i class="fas fa-sync me-2"></i>Check Status
+                    </button>
+                    <div id="statusResult" class="mt-3"></div>
+                </div>
+            </div>
+
+            <!-- Get Video Metadata -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-info me-2"></i>Get Video Metadata
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Video URL</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fab fa-youtube"></i></span>
+                            <input type="url" class="form-control" id="metadataUrl" placeholder="https://www.youtube.com/watch?v=...">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="getMetadataBtn">
+                        <i class="fas fa-search me-2"></i>Get Metadata
+                    </button>
+                    <div id="metadataResult" class="mt-3"></div>
+                    <img id="thumbnailImage" class="mt-3 img-fluid rounded" style="display: none; max-width: 320px;">
+                </div>
+            </div>
+
+            <!-- Health Check -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-heartbeat me-2"></i>API Health Check
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-primary" id="healthCheckBtn">
+                        <i class="fas fa-sync me-2"></i>Check Health
+                    </button>
+                    <div id="healthResult" class="mt-3"></div>
+                </div>
+            </div>
+
+            <!-- Get Metrics -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-2"></i>API Metrics
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-primary" id="getMetricsBtn">
+                        <i class="fas fa-sync me-2"></i>Get Metrics
+                    </button>
+                    <div id="metricsResult" class="mt-3"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="examples" class="mb-5">
+            <h2><i class="fas fa-code me-2"></i>Code Examples</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span><i class="fab fa-python me-2"></i>Python Example</span>
+                            <button class="btn btn-sm btn-outline-light copy-code" data-target="python-code">
+                                <i class="fas fa-copy me-1"></i>Copy
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <pre><code id="python-code">import requests
+import time
+
+def convert_video(url, format="mp3", quality="high"):
+    # Start conversion
+    response = requests.post(
+        "http://localhost:8000/convert",
+        json={
+            "url": url,
+            "format": format,
+            "quality": quality
+        }
+    )
+    response.raise_for_status()
+    token = response.json()["token"]
+
+    # Check status
+    while True:
+        status = requests.get(f"http://localhost:8000/status/{token}").json()
+        if status["status"] == "completed":
+            break
+        time.sleep(2)
+
+    # Download file
+    download = requests.get(f"http://localhost:8000/download/{token}")
+    with open("output.mp3", "wb") as f:
+        f.write(download.content)</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span><i class="fab fa-js me-2"></i>JavaScript Example</span>
+                            <button class="btn btn-sm btn-outline-light copy-code" data-target="js-code">
+                                <i class="fas fa-copy me-1"></i>Copy
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <pre><code id="js-code">async function convertVideo(url, format = "mp3", quality = "high") {
+    // Start conversion
+    const response = await fetch("http://localhost:8000/convert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url, format, quality })
+    });
+    const { token } = await response.json();
+
+    // Check status
+    while (true) {
+        const status = await fetch(`http://localhost:8000/status/${token}`).then(r => r.json());
+        if (status.status === "completed") break;
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    // Download file
+    const download = await fetch(`http://localhost:8000/download/${token}`);
+    const blob = await download.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "output.mp3";
+    a.click();
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">YouTube Converter API - Developer Portal</p>
+            <p class="text-muted">Documentation and API Playground</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // DOM Elements
+        const convertBtn = document.getElementById('convertBtn');
+        const checkStatusBtn = document.getElementById('checkStatusBtn');
+        const getMetadataBtn = document.getElementById('getMetadataBtn');
+        const healthCheckBtn = document.getElementById('healthCheckBtn');
+        const getMetricsBtn = document.getElementById('getMetricsBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        
+        // Result containers
+        const conversionStatus = document.getElementById('conversionStatus');
+        const conversionProgress = document.getElementById('conversionProgress');
+        const tokenDisplay = document.getElementById('tokenDisplay');
+        const statusResult = document.getElementById('statusResult');
+        const metadataResult = document.getElementById('metadataResult');
+        const healthResult = document.getElementById('healthResult');
+        const metricsResult = document.getElementById('metricsResult');
+        const thumbnailImage = document.getElementById('thumbnailImage');
+        
+        // Base URL - update this if your API is hosted elsewhere
+        const API_BASE_URL = 'http://localhost:8000';
+        document.getElementById('baseUrl').textContent = API_BASE_URL;
+        
+        // Current conversion token
+        let currentToken = null;
+        
+        // Event Listeners
+        convertBtn.addEventListener('click', startConversion);
+        checkStatusBtn.addEventListener('click', checkStatus);
+        getMetadataBtn.addEventListener('click', getVideoMetadata);
+        healthCheckBtn.addEventListener('click', checkHealth);
+        getMetricsBtn.addEventListener('click', getMetrics);
+        downloadBtn.addEventListener('click', downloadFile);
+        
+        // Start conversion process
+        function startConversion() {
+            const videoUrl = document.getElementById('videoUrl').value;
+            const format = document.getElementById('format').value;
+            const quality = document.getElementById('quality').value;
+            
+            if (!videoUrl) {
+                showError(conversionStatus, 'Please enter a YouTube URL');
+                return;
+            }
+            
+            // Reset UI
+            conversionStatus.innerHTML = '';
+            tokenDisplay.innerHTML = '';
+            downloadBtn.style.display = 'none';
+            conversionProgress.style.width = '0%';
+            
+            // Show initial status
+            conversionStatus.innerHTML = '<div class="status-badge status-queued">Queuing conversion...</div>';
+            
+            // Make API request
+            fetch(`${API_BASE_URL}/convert`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    url: videoUrl,
+                    format: format,
+                    quality: quality
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    currentToken = data.token;
+                    tokenDisplay.innerHTML = `<p><strong>Token:</strong> ${data.token}</p>`;
+                    conversionStatus.innerHTML = '<div class="status-badge status-in-progress">Conversion started...</div>';
+                    
+                    // Start polling for status
+                    pollConversionStatus(data.token);
+                } else {
+                    showError(conversionStatus, data.detail || 'Failed to start conversion');
+                }
+            })
+            .catch(error => {
+                showError(conversionStatus, `Error: ${error.message}`);
+            });
+        }
+        
+        // Poll for conversion status
+        function pollConversionStatus(token) {
+            let progress = 0;
+            const interval = setInterval(() => {
+                if (progress < 90) {
+                    progress += 10;
+                    conversionProgress.style.width = `${progress}%`;
+                }
+                
+                fetch(`${API_BASE_URL}/status/${token}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'completed') {
+                        clearInterval(interval);
+                        conversionProgress.style.width = '100%';
+                        conversionStatus.innerHTML = '<div class="status-badge status-completed">Conversion completed!</div>';
+                        downloadBtn.style.display = 'block';
+                        tokenDisplay.innerHTML = `<p><strong>Token:</strong> ${token}</p>
+                                                   <p><strong>File:</strong> ${data.file_path || 'N/A'}</p>`;
+                    } else if (data.status === 'failed') {
+                        clearInterval(interval);
+                        conversionStatus.innerHTML = `<div class="status-badge status-failed">Conversion failed: ${data.error || 'Unknown error'}</div>`;
+                    } else if (data.status === 'in_progress') {
+                        conversionStatus.innerHTML = '<div class="status-badge status-in-progress">Conversion in progress...</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Polling error:', error);
+                });
+            }, 2000);
+        }
+        
+        // Check conversion status
+        function checkStatus() {
+            const token = document.getElementById('statusToken').value;
+            
+            if (!token) {
+                showError(statusResult, 'Please enter a token');
+                return;
+            }
+            
+            statusResult.innerHTML = '<p>Checking status...</p>';
+            
+            fetch(`${API_BASE_URL}/status/${token}`)
+            .then(response => response.json())
+            .then(data => {
+                let statusClass = 'status-queued';
+                if (data.status === 'completed') statusClass = 'status-completed';
+                if (data.status === 'in_progress') statusClass = 'status-in-progress';
+                if (data.status === 'failed') statusClass = 'status-failed';
+                
+                const statusDisplay = `<div class="status-badge ${statusClass}">${data.status}</div>`;
+                
+                statusResult.innerHTML = `
+                    ${statusDisplay}
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            })
+            .catch(error => {
+                showError(statusResult, `Error: ${error.message}`);
+            });
+        }
+        
+        // Get video metadata
+        function getVideoMetadata() {
+            const videoUrl = document.getElementById('metadataUrl').value;
+            
+            if (!videoUrl) {
+                showError(metadataResult, 'Please enter a YouTube URL');
+                return;
+            }
+            
+            metadataResult.innerHTML = '<p>Fetching metadata...</p>';
+            thumbnailImage.style.display = 'none';
+            
+            fetch(`${API_BASE_URL}/video/metadata`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    url: videoUrl
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                metadataResult.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                
+                if (data.thumbnail) {
+                    thumbnailImage.src = data.thumbnail;
+                    thumbnailImage.style.display = 'block';
+                    thumbnailImage.alt = `Thumbnail for ${data.title || 'video'}`;
+                }
+            })
+            .catch(error => {
+                showError(metadataResult, `Error: ${error.message}`);
+            });
+        }
+        
+        // Download converted file
+        function downloadFile() {
+            if (!currentToken) {
+                showError(conversionStatus, 'No conversion token available');
+                return;
+            }
+            
+            window.open(`${API_BASE_URL}/download/${currentToken}`, '_blank');
+        }
+        
+        // Check API health
+        function checkHealth() {
+            healthResult.innerHTML = '<p>Checking API health...</p>';
+            
+            fetch(`${API_BASE_URL}/health`)
+            .then(response => response.json())
+            .then(data => {
+                healthResult.innerHTML = `
+                    <div class="status-badge status-completed">API is healthy</div>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            })
+            .catch(error => {
+                healthResult.innerHTML = `
+                    <div class="status-badge status-failed">API is down</div>
+                    <p>Error: ${error.message}</p>
+                `;
+            });
+        }
+        
+        // Get API metrics
+        function getMetrics() {
+            metricsResult.innerHTML = '<p>Fetching metrics...</p>';
+            
+            fetch(`${API_BASE_URL}/metrics`)
+            .then(response => response.text())
+            .then(data => {
+                // Format Prometheus metrics for display
+                const formattedMetrics = data.split('\n')
+                    .map(line => {
+                        // Highlight metric names
+                        if (line.startsWith('#') || line.includes(' ')) {
+                            return `<span class="metric-line">${line}</span>`;
+                        }
+                        return line;
+                    })
+                    .join('\n');
+                
+                metricsResult.innerHTML = `<pre>${formattedMetrics}</pre>`;
+            })
+            .catch(error => {
+                showError(metricsResult, `Error: ${error.message}`);
+            });
+        }
+        
+        // Helper function to display errors
+        function showError(element, message) {
+            element.innerHTML = `<div class="status-badge status-failed">${message}</div>`;
+        }
+        
+        // Initialize with a health check
+        checkHealth();
+
+        // Copy code functionality
+        document.querySelectorAll('.copy-code').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.dataset.target;
+                const code = document.getElementById(targetId).textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    btn.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fas fa-copy me-1"></i>Copy';
+                    }, 2000);
+                });
+            });
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

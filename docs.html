@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Audio/Video Converter API - Developer Documentation</title>
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #1976D2;
+            --success-color: #4CAF50;
+            --error-color: #f44336;
+            --warning-color: #ff9800;
+            --text-color: #333;
+            --bg-color: #fff;
+            --code-bg: #f8f9fa;
+            --border-color: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: calc(100vh - 40px);
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin: 10px 0;
+        }
+
+        .sidebar a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.8em;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.4em;
+            margin: 25px 0 15px;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: var(--code-bg);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+
+        /* Endpoint Cards */
+        .endpoint {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .method {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .method.get { background: var(--success-color); }
+        .method.post { background: var(--primary-color); }
+        .method.put { background: var(--warning-color); }
+        .method.delete { background: var(--error-color); }
+
+        /* Response Examples */
+        .response {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border: 1px solid #c8e6c9;
+        }
+
+        .error {
+            background: #ffebee;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border: 1px solid #ffcdd2;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        /* Notes and Warnings */
+        .note {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border: 1px solid #ffe0b2;
+        }
+
+        .warning {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border: 1px solid #ffb74d;
+        }
+
+        /* Code Examples */
+        .code-example {
+            background: #263238;
+            color: #fff;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .code-example .comment {
+            color: #78909c;
+        }
+
+        .code-example .string {
+            color: #a5d6a7;
+        }
+
+        .code-example .keyword {
+            color: #90caf9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                height: auto;
+            }
+        }
+
+        /* Copy Button */
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#authentication">Authentication</a></li>
+                <li><a href="#endpoints">API Endpoints</a></li>
+                <li><a href="#conversion">Video Conversion</a></li>
+                <li><a href="#status">Status Checking</a></li>
+                <li><a href="#download">File Download</a></li>
+                <li><a href="#health">Health Checks</a></li>
+                <li><a href="#quality">Quality Settings</a></li>
+                <li><a href="#errors">Error Handling</a></li>
+                <li><a href="#rate-limiting">Rate Limiting</a></li>
+                <li><a href="#monitoring">Monitoring</a></li>
+                <li><a href="#examples">Code Examples</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <h1>YouTube Audio/Video Converter API</h1>
+            <p>A powerful API for converting YouTube videos to MP3 or MP4 format with advanced features and monitoring capabilities.</p>
+
+            <section id="overview">
+                <h2>Overview</h2>
+                <p>This API provides a robust solution for converting YouTube videos to various formats with different quality options. It includes features like:</p>
+                <ul>
+                    <li>Adaptive concurrency control based on system load</li>
+                    <li>Redis-based job queue and caching</li>
+                    <li>Prometheus metrics and monitoring</li>
+                    <li>Health checks and status endpoints</li>
+                    <li>Automatic file cleanup and expiry management</li>
+                    <li>CDN support (optional)</li>
+                </ul>
+            </section>
+
+            <section id="getting-started">
+                <h2>Getting Started</h2>
+                <div class="endpoint">
+                    <h3>Base URL</h3>
+    <code>http://localhost:8000</code>
+                </div>
+
+                <h3>Requirements</h3>
+                <ul>
+                    <li>Python 3.8+</li>
+                    <li>FFmpeg</li>
+                    <li>Redis</li>
+                    <li>Sufficient disk space</li>
+    </ul>
+
+                <div class="note">
+                    <h4>Quick Start</h4>
+                    <pre><code># Install dependencies
+pip install -r requirements.txt
+
+# Start the server
+python main.py</code></pre>
+        </div>
+            </section>
+
+            <section id="endpoints">
+                <h2>API Endpoints</h2>
+
+    <div class="endpoint">
+                    <h3>Convert Video</h3>
+                    <span class="method post">POST</span>
+                    <code>/convert</code>
+        
+        <h4>Request Body:</h4>
+                    <pre><code>{
+    "url": "https://www.youtube.com/watch?v=VIDEO_ID",
+    "format": "mp3",  // or "mp4"
+    "quality": "high"  // or "medium", "low"
+}</code></pre>
+
+                    <h4>Response:</h4>
+                    <div class="response">
+                        <pre><code>{
+    "token": "job-token",
+    "status": "queued"
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+                    <h3>Check Status</h3>
+                    <span class="method get">GET</span>
+                    <code>/status/{token}</code>
+
+                    <h4>Response:</h4>
+                    <div class="response">
+                        <pre><code>{
+    "status": "completed",
+    "url": "https://www.youtube.com/watch?v=VIDEO_ID",
+    "format": "mp3",
+    "quality": "high",
+    "file_path": "path/to/file.mp3",
+    "video_title": "Video Title"
+}</code></pre>
+                    </div>
+
+                    <h4>Status Values:</h4>
+                    <table>
+                        <tr>
+                            <th>Status</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><code>queued</code></td>
+                            <td>Job is waiting to be processed</td>
+                        </tr>
+                        <tr>
+                            <td><code>in_progress</code></td>
+                            <td>Conversion is in progress</td>
+                        </tr>
+                        <tr>
+                            <td><code>completed</code></td>
+                            <td>Conversion completed successfully</td>
+                        </tr>
+                        <tr>
+                            <td><code>failed</code></td>
+                            <td>Conversion failed</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="endpoint">
+                    <h3>Download File</h3>
+                    <span class="method get">GET</span>
+                    <code>/download/{token}</code>
+
+                    <h4>Response:</h4>
+                    <p>File download with appropriate content type and filename.</p>
+
+                    <div class="note">
+                        <strong>Note:</strong> Files are automatically deleted after 10 minutes of inactivity.
+        </div>
+    </div>
+
+    <div class="endpoint">
+                    <h3>Health Checks</h3>
+                    <span class="method get">GET</span>
+                    <code>/health</code>
+                    <p>Combined health check endpoint.</p>
+
+                    <span class="method get">GET</span>
+                    <code>/health/liveness</code>
+                    <p>Basic liveness check.</p>
+
+                    <span class="method get">GET</span>
+                    <code>/health/readiness</code>
+                    <p>Detailed readiness check including Redis and disk space status.</p>
+
+                    <h4>Response:</h4>
+                    <div class="response">
+                        <pre><code>{
+    "status": "ready",
+    "services": {
+        "redis": true,
+        "disk_space": true,
+        "ffmpeg": true
+    }
+}</code></pre>
+        </div>
+    </div>
+            </section>
+
+            <section id="quality">
+                <h2>Quality Settings</h2>
+                
+                <h3>MP3 Format</h3>
+                <table>
+                    <tr>
+                        <th>Quality</th>
+                        <th>Bitrate</th>
+                        <th>Use Case</th>
+                    </tr>
+                    <tr>
+                        <td>High</td>
+                        <td>192kbps</td>
+                        <td>Music, high-quality audio</td>
+                    </tr>
+                    <tr>
+                        <td>Medium</td>
+                        <td>128kbps</td>
+                        <td>General purpose, podcasts</td>
+                    </tr>
+                    <tr>
+                        <td>Low</td>
+                        <td>96kbps</td>
+                        <td>Speech, low bandwidth</td>
+                    </tr>
+                </table>
+
+                <h3>MP4 Format</h3>
+                <table>
+                    <tr>
+                        <th>Quality</th>
+                        <th>Resolution</th>
+                        <th>Video Bitrate</th>
+                        <th>Audio Bitrate</th>
+                    </tr>
+                    <tr>
+                        <td>High</td>
+                        <td>1080p</td>
+                        <td>2Mbps</td>
+                        <td>192kbps</td>
+                    </tr>
+                    <tr>
+                        <td>Medium</td>
+                        <td>720p</td>
+                        <td>1Mbps</td>
+                        <td>128kbps</td>
+                    </tr>
+                    <tr>
+                        <td>Low</td>
+                        <td>480p</td>
+                        <td>500kbps</td>
+                        <td>96kbps</td>
+                    </tr>
+                </table>
+            </section>
+
+            <section id="errors">
+                <h2>Error Handling</h2>
+                <div class="error">
+                    <h4>Common Error Responses:</h4>
+    <table>
+        <tr>
+                            <th>Status Code</th>
+            <th>Description</th>
+            <th>Solution</th>
+        </tr>
+        <tr>
+                            <td><code>400</code></td>
+            <td>Bad Request</td>
+                            <td>Check request parameters</td>
+        </tr>
+        <tr>
+                            <td><code>404</code></td>
+            <td>Not Found</td>
+                            <td>Verify token or file exists</td>
+        </tr>
+        <tr>
+                            <td><code>503</code></td>
+                            <td>Service Unavailable</td>
+                            <td>Check Redis and disk space</td>
+        </tr>
+    </table>
+    </div>
+            </section>
+
+            <section id="examples">
+                <h2>Code Examples</h2>
+
+                <h3>Python Example</h3>
+                <div class="code-example">
+                    <pre><code><span class="keyword">import</span> requests
+<span class="keyword">import</span> time
+
+<span class="keyword">def</span> convert_video(url, format=<span class="string">"mp3"</span>, quality=<span class="string">"high"</span>):
+    <span class="comment"># Start conversion</span>
+    response = requests.post(
+        <span class="string">"http://localhost:8000/convert"</span>,
+        json={
+            <span class="string">"url"</span>: url,
+            <span class="string">"format"</span>: format,
+            <span class="string">"quality"</span>: quality
+        }
+    )
+    response.raise_for_status()
+    token = response.json()[<span class="string">"token"</span>]
+
+    <span class="comment"># Check status</span>
+    <span class="keyword">while</span> True:
+        status = requests.get(f<span class="string">"http://localhost:8000/status/{token}"</span>).json()
+        <span class="keyword">if</span> status[<span class="string">"status"</span>] == <span class="string">"completed"</span>:
+            <span class="keyword">break</span>
+        time.sleep(2)
+
+    <span class="comment"># Download file</span>
+    download = requests.get(f<span class="string">"http://localhost:8000/download/{token}"</span>)
+    <span class="keyword">with</span> open(<span class="string">"output.mp3"</span>, <span class="string">"wb"</span>) <span class="keyword">as</span> f:
+        f.write(download.content)</code></pre>
+                </div>
+
+                <h3>JavaScript Example</h3>
+                <div class="code-example">
+                    <pre><code><span class="keyword">async function</span> convertVideo(url, format = <span class="string">"mp3"</span>, quality = <span class="string">"high"</span>) {
+    <span class="comment">// Start conversion</span>
+    const response = await fetch(<span class="string">"http://localhost:8000/convert"</span>, {
+        method: <span class="string">"POST"</span>,
+        headers: { <span class="string">"Content-Type"</span>: <span class="string">"application/json"</span> },
+        body: JSON.stringify({ url, format, quality })
+    });
+    const { token } = await response.json();
+
+    <span class="comment">// Check status</span>
+    <span class="keyword">while</span> (true) {
+        const status = await fetch(`http://localhost:8000/status/${token}`).then(r => r.json());
+        <span class="keyword">if</span> (status.status === <span class="string">"completed"</span>) <span class="keyword">break</span>;
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    <span class="comment">// Download file</span>
+    const download = await fetch(`http://localhost:8000/download/${token}`);
+    const blob = await download.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement(<span class="string">"a"</span>);
+    a.href = url;
+    a.download = <span class="string">"output.mp3"</span>;
+    a.click();</code></pre>
+        </div>
+            </section>
+
+            <section id="monitoring">
+                <h2>Monitoring</h2>
+                <p>Prometheus metrics are available at <code>/metrics</code> endpoint.</p>
+                
+                <h3>Available Metrics</h3>
+                <table>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>CONVERSION_COUNT</code></td>
+                        <td>Total number of conversions</td>
+                    </tr>
+                    <tr>
+                        <td><code>ERROR_COUNT</code></td>
+                        <td>Total number of errors</td>
+                    </tr>
+                    <tr>
+                        <td><code>CONVERSION_TIME</code></td>
+                        <td>Time taken for conversions</td>
+                    </tr>
+                </table>
+            </section>
+
+            <div class="note">
+                <h3>Important Notes:</h3>
+                <ul>
+                    <li>Files are automatically cleaned up after 10 minutes of inactivity</li>
+                    <li>Minimum 1GB of free disk space is required</li>
+                    <li>Redis connection is required for job queue management</li>
+                    <li>FFmpeg must be installed and available in the system PATH</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Add copy button functionality
+        document.querySelectorAll('pre').forEach(block => {
+            const button = document.createElement('button');
+            button.className = 'copy-btn';
+            button.textContent = 'Copy';
+            block.style.position = 'relative';
+            block.appendChild(button);
+
+            button.addEventListener('click', () => {
+                const code = block.querySelector('code').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    button.textContent = 'Copied!';
+                    setTimeout(() => {
+                        button.textContent = 'Copy';
+                    }, 2000);
+                });
+            });
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

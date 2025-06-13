@@ -1,0 +1,22 @@
+2025-06-13 04:28:35,261 - __main__ - INFO - Using FFmpeg from PATH: C:\ffmpeg\bin\ffmpeg.EXE
+2025-06-13 04:28:35,372 - __main__ - INFO - Adjusted concurrency limit to 2
+2025-06-13 04:29:12,585 - __main__ - INFO - Using FFmpeg from PATH: C:\ffmpeg\bin\ffmpeg.EXE
+2025-06-13 04:29:12,636 - __main__ - INFO - Starting server on port 8000
+2025-06-13 04:29:38,696 - __main__ - INFO - Using FFmpeg from PATH: C:\ffmpeg\bin\ffmpeg.EXE
+2025-06-13 04:29:38,748 - __main__ - INFO - Starting server on port 8000
+2025-06-13 04:29:38,817 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-4' coro=<AdaptiveSemaphore.adjust() done, defined at C:\Users\Ali Raza Makki\Music\yt-audio-api-main\main.py:614> exception=AttributeError("'Config' object has no attribute 'MAX_CONCURRENT'")>
+Traceback (most recent call last):
+  File "C:\Users\Ali Raza Makki\Music\yt-audio-api-main\main.py", line 619, in adjust
+    config.MAX_CONCURRENT,
+    ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Config' object has no attribute 'MAX_CONCURRENT'
+2025-06-13 04:30:40,761 - __main__ - INFO - Using FFmpeg from PATH: C:\ffmpeg\bin\ffmpeg.EXE
+2025-06-13 04:30:40,810 - __main__ - INFO - Starting server on port 8000
+2025-06-13 04:30:40,886 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-4' coro=<AdaptiveSemaphore.adjust() done, defined at C:\Users\Ali Raza Makki\Music\yt-audio-api-main\main.py:615> exception=AttributeError("'Config' object has no attribute 'MAX_CONCURRENT'")>
+Traceback (most recent call last):
+  File "C:\Users\Ali Raza Makki\Music\yt-audio-api-main\main.py", line 620, in adjust
+    config.MAX_CONCURRENT,
+    ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Config' object has no attribute 'MAX_CONCURRENT'
